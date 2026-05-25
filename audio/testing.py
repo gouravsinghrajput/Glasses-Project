@@ -1,7 +1,7 @@
 import pyaudio
 import openwakeword
-# import silero_vad
-# import faster_whisper
+import silero_vad
+import faster_whisper
 import pyttsx3
 import sounddevice
 
