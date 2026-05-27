@@ -7,6 +7,7 @@ mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(
     static_image_mode = False,
     max_num_hands = 2,
+    model_complexity = 0,
     min_detection_confidence = 0.4,
     min_tracking_confidence = 0.5
 )
@@ -14,6 +15,14 @@ hands = mp_hands.Hands(
 mp_draw = mp.solutions.drawing_utils 
 
 cap = cv.VideoCapture(0)
+
+
+prev_right_thumb = None
+prev_right_index = None
+prev_left_thumb = None
+prev_left_index = None
+
+
 
 while True:
     ret, frame = cap.read()
@@ -57,12 +66,53 @@ while True:
 
 
             if hand_label == "Right":
-                right_thumb = thumb_tip_coords
-                right_index = index_tip_coords
+                
+                if prev_right_thumb is not None and prev_right_index is not None:
+
+                    smooth_thumb = (
+                        int(0.5 * prev_right_thumb[0] + 0.5 * thumb_tip_coords[0]),
+                        int(0.5 * prev_right_thumb[1] + 0.5 * thumb_tip_coords[1])
+                    )
+
+                    smooth_index = (
+                        int(0.5 * prev_right_index[0] + 0.5 * index_tip_coords[0]),
+                        int(0.5 * prev_right_index[1] + 0.5 * index_tip_coords[1])
+                    )
+
+                else:
+                    smooth_thumb = thumb_tip_coords
+                    smooth_index = index_tip_coords
+
+                right_thumb = smooth_thumb
+                right_index = smooth_index
+
+                prev_right_thumb = smooth_thumb
+                prev_right_index = smooth_index
+
+
 
             elif hand_label == "Left":
-                left_thumb = thumb_tip_coords
-                left_index = index_tip_coords
+                if prev_left_thumb is not None and prev_left_index is not None:
+
+                    smooth_thumb = (
+                        int(0.5 * prev_left_thumb[0] + 0.5 * thumb_tip_coords[0]),
+                        int(0.5 * prev_left_thumb[1] + 0.5 * thumb_tip_coords[1])
+                    )
+
+                    smooth_index = (
+                        int(0.5 * prev_left_index[0] + 0.5 * index_tip_coords[0]),
+                        int(0.5 * prev_left_index[1] + 0.5 * index_tip_coords[1])
+                    )
+
+                else:
+                    smooth_thumb = thumb_tip_coords
+                    smooth_index = index_tip_coords
+
+                left_thumb = smooth_thumb
+                left_index = smooth_index
+
+                prev_left_thumb = smooth_thumb
+                prev_left_index = smooth_index
 
             mp_draw.draw_landmarks(
                 frame,
@@ -89,7 +139,7 @@ while True:
             frame
         )
 
-        
+
         # inv_part = cv.bitwise_and(
         #     inverted_frame,
         #     inverted_frame,
