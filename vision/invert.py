@@ -23,6 +23,11 @@ prev_left_thumb = None
 prev_left_index = None
 
 
+portal_activate = False 
+prev_both_pinched = False 
+
+pinch_threshold = 40
+
 
 while True:
     ret, frame = cap.read()
@@ -41,6 +46,10 @@ while True:
     right_thumb = None
     left_index = None
     left_thumb = None
+
+
+    left_pinch = False
+    right_pinch = False 
 
 
 
@@ -65,7 +74,15 @@ while True:
             )
 
 
+            distance = np.hypot(
+                thumb_tip_coords[0] - index_tip_coords[0],
+                thumb_tip_coords[1] - index_tip_coords[1]
+            )
+
+
             if hand_label == "Right":
+
+                right_pinch = distance < pinch_threshold
                 
                 if prev_right_thumb is not None and prev_right_index is not None:
 
@@ -92,6 +109,9 @@ while True:
 
 
             elif hand_label == "Left":
+
+                left_pinch = distance < pinch_threshold
+
                 if prev_left_thumb is not None and prev_left_index is not None:
 
                     smooth_thumb = (
@@ -121,7 +141,17 @@ while True:
             )
 
 
-    if all([left_index, left_thumb, right_thumb, right_index]):
+    both_pinched = left_pinch and right_pinch 
+    if both_pinched and not prev_both_pinched:
+        portal_activate = not portal_activate 
+
+    prev_both_pinched = both_pinched
+
+
+
+    if (
+        all([left_index, left_thumb, right_thumb, right_index]) and 
+        portal_activate):
 
         points = np.array([left_index, left_thumb, right_thumb, right_index], np.int32)
 
