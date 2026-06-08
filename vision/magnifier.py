@@ -25,7 +25,7 @@ def magnifier():
     portal_activate = False 
     prev_both_pinched = False
 
-    pinch_treshold = 40
+    pinch_threshold = 40
 
     while True:
         ret, frame = cap.read()
@@ -73,4 +73,17 @@ def magnifier():
                     int(index_tip_landmark.y * h)
                     )
                 
-                
+                distance = np.hypot(
+                    thumb_tip_coords[0] - index_tip_coords[0],
+                    thumb_tip_coords[1] - index_tip_coords[1]
+                )
+
+                if hand_label == "Right":
+                    
+                    right_pinch = distance < pinch_threshold
+
+                    if prev_right_thumb is not None and prev_right_index is not None:
+                        smooth_thumb = (
+                            int(0.5 * prev_right_thumb[0] + 0.5 * thumb_tip_coords[0]), 
+                            int()
+                        )
