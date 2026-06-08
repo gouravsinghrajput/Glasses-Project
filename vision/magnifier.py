@@ -52,6 +52,25 @@ def magnifier():
 
         if results.multi_hand_landmarks and results.multi_handedness:
             for hand_landmarks, hand in zip(
-
+                results.multi_hand_landmarks, results.multi_handedness
             ):
-                pass         
+                mp.draw_landmarks(frame, 
+                                  hand_landmarks, 
+                                  mp_hands.HAND_CONNECTIONS)
+                
+                hand_label = hand.classification[0].label
+
+                thumb_tip_landmark = hand_landmarks.landmark[4]
+                index_tip_landmark = hand_landmarks.landmark[8]
+
+                thumb_tip_coords = (
+                    int(thumb_tip_landmark.x * w),
+                    int(thumb_tip_landmark.y * h)
+                    )
+                
+                index_tip_coords = (
+                    int(index_tip_landmark.x * w),
+                    int(index_tip_landmark.y * h)
+                    )
+                
+                
