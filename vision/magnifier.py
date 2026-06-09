@@ -144,7 +144,18 @@ def magnifier():
 
         prev_both_pinched = both_pinched
 
+        polygon = np.array([
+            left_index,
+            left_thumb,
+            right_thumb,
+            right_index
+        ], dtype = np.int32)
 
+
+        mask = np.zeros((h, w), dtype = np.uint8)
+
+        cv.fillPoly(mask, [polygon], 255)
         
 
+    
 
