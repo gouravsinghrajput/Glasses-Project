@@ -196,7 +196,3 @@ def magnifier_1_5():
 
     cap.release()
     cv.destroyAllWindows()
-
-magnifier_1_5()
-
-
