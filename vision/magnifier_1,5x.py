@@ -169,6 +169,16 @@ def magnifier_1_5():
 
             magnified_frame = cv.resize(frame, (1500, 1050))
 
+            start_x = (1500 - 1000) // 2
+            start_y = (1050 - 700) // 2
+
+            magnified_frame = magnified_frame[
+                start_y:start_y + 700,
+                start_x:start_x + 1000
+            ]
+
+            magnified_frame.shape == frame.shape
+
             frame = np.where(
                 masked_frame[:, :, None] == 255,
                 magnified_frame,
