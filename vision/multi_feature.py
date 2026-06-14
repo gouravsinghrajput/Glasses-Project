@@ -92,4 +92,9 @@ def multi_feature():
                 pinky_tip_coords = (    
                     int(pinky_tip_landmarks.x * w),
                     int(pinky_tip_landmarks.y * h)
-                )   
+                )
+
+                distance_index_thumb = np.hypot(
+                    thumb_tip_coords[0] - index_tip_coords[0],
+                    thumb_tip_coords[1] - index_tip_coords[1]
+                )
