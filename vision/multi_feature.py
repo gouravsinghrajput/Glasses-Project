@@ -98,3 +98,20 @@ def multi_feature():
                     thumb_tip_coords[0] - index_tip_coords[0],
                     thumb_tip_coords[1] - index_tip_coords[1]
                 )
+
+                distance_middle_thumb = np.hypot(
+                    thumb_tip_coords[0] - middle_tip_coords[0],
+                    thumb_tip_coords[1] - middle_tip_coords[1]
+                )
+
+                distance_ring_thumb = np.hypot(
+                    thumb_tip_coords[0] - ring_tip_coords[0],
+                    thumb_tip_coords[1] - ring_tip_coords[1]
+                )
+
+                distance_pinky_thumb = np.hypot(
+                    thumb_tip_coords[0] - pinky_tip_coords[0],
+                    thumb_tip_coords[1] - pinky_tip_coords[1]
+                )
+
+
