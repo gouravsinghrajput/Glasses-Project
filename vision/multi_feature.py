@@ -236,3 +236,11 @@ def multi_feature():
                     prev_left_pinky = smooth_pinky 
 
 
+                mp_draw.draw_landmarks(
+                    frame,
+                    hand_landmarks,
+                    mp_hands.HAND_CONNECTIONS
+                )
+
+        
+                
