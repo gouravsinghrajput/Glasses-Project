@@ -16,7 +16,7 @@ def multi_feature():
     )
 
 
-    mp_draw = mp.solutions.darwing_utils
+    mp_draw = mp.solutions.drawing_utils
 
 
     cap = cv.VideoCapture(0)
@@ -65,7 +65,7 @@ def multi_feature():
 
         if results.multi_hand_landmarks and results.multi_handedness:
             for hand_landmarks, hand in zip(
-                results.multi_hand_landmarks, results.multi_handeddness
+                results.multi_hand_landmarks, results.multi_handedness
             ):
 
                 hand_label = hand.classification[0].label
@@ -243,13 +243,172 @@ def multi_feature():
                 )
 
         
-        all_pinched = right_pinch and right_middle_pinch and right_ring_pinch and right_pinky_pinch and left_pinch and left_middle_pinch and left_ring_pinch and left_pinky_pinch
-        if all_pinched and not prev_all_pinched:
+        # all_pinched = right_pinch and right_middle_pinch and right_ring_pinch and right_pinky_pinch and left_pinch and left_middle_pinch and left_ring_pinch and left_pinky_pinch
+        # if all_pinched and not prev_all_pinched:
+        #     portal_activate = not portal_activate
+
+        # prev_all_pinched = all_pinched
+
+
+        both_pinched = right_pinch and left_pinch
+        if both_pinched and not prev_both_pinched:
             portal_activate = not portal_activate
 
-        prev_all_pinched = all_pinched
+        prev_both_pinched = both_pinched
 
-        
-         
+
+
+
+        if (
+            all([left_index, left_thumb, right_thumb, right_index]) and 
+            portal_activate):
+
+            points = np.array([left_index, left_thumb, right_thumb, right_index], np.int32)
+
+            cv.polylines(frame, [points], isClosed = True, color = (0, 255, 0), thickness = 3)
+
+            mask_frame = np.zeros((h, w), dtype = np.uint8)
+
+            cv.fillPoly(mask_frame, [points], color = 255)
+
+
+
+        # --------------- watercolour -------------
+            # gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+
+            # effect_frame = cv.stylization(
+            #     gray,
+            #     sigma_s = 60,
+            #     sigma_r = 0.45
+            # )
+
+
+        # --------------- thermal -----------------
+            # gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+
+            # effect_frame = cv.applyColorMap(
+            #     gray,
+            #     cv.COLORMAP_JET
+            # )
+
+
+        #  -------- edge detection -----------
+            # gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+
+            # edges = cv.Canny(gray, 80, 150)
+
+            # effect_frame = cv.cvtColor(edges,
+            #                     cv.COLOR_GRAY2BGR)
+
+
+        # ----------- stippling -----------------------
+            # gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+
+            # effect = np.full_like(frame, 255)
+
+            # for y in range(0, h, 4):
+            #     for x in range(0, w, 4):
+
+            #         intensity = gray[y,x]
+
+            #         radius = int((255 - intensity)/80)
+
+            #         if radius > 0:
+            #             cv.circle(effect, (x,y), radius, (0,0,0), -1)
+
+        # --------------- pencil sketch --------------------
+            # gray_sketch, color_sketch = cv.pencilSketch(
+            #     frame,
+            #     sigma_s=60,
+            #     sigma_r=0.07,
+            #     shade_factor=0.05
+            # )
+
+            # effect = cv.cvtColor(gray_sketch,
+            #                     cv.COLOR_GRAY2BGR)
+
+        # --------- cartoon ---------------------
+            # gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+
+            # gray = cv.medianBlur(gray, 5)
+
+            # edges = cv.adaptiveThreshold(
+            #     gray,
+            #     255,
+            #     cv.ADAPTIVE_THRESH_MEAN_C,
+            #     cv.THRESH_BINARY,
+            #     9,
+            #     9
+            # )
+
+            # color = cv.bilateralFilter(frame,
+            #                         9,
+            #                         300,
+            #                         300)
+
+            # effect = cv.bitwise_and(
+            #     color,
+            #     color,
+            #     mask=edges
+            # )
+
+        # --------- pixelization ---------------------
+            # small = cv.resize(
+            #     frame,
+            #     (w//10, h//10),
+            #     interpolation=cv.INTER_LINEAR
+            # )
+
+            # effect = cv.resize(
+            #     small,
+            #     (w,h),
+            #     interpolation=cv.INTER_NEAREST
+            # )
+
+        # --------- risograph --------------------
+            # gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+
+            # gray = (gray//64)*64
+
+            # effect = np.zeros_like(frame)
+
+            # effect[:,:,0] = gray * 0.9
+            # effect[:,:,1] = gray * 0.2
+            # effect[:,:,2] = gray
+
+            # noise = np.random.randint(
+            #     0,
+            #     30,
+            #     frame.shape,
+            #     dtype=np.uint8
+            # )
+
+            # effect = cv.add(effect, noise)
+
+
+
+
+
+            # frame = np.where(
+            #     mask_frame[:, :, None] == 255,
+            #     effect_frame,
+            #     frame
+            # )
+
+
+        cv.imshow("..", frame)
+
+        k = cv.waitKey(1)
+
+        if k == 27:
+            break
+
+
+    cap.release()
+    cv.destroyAllWindows()
+
+multi_feature()
+
+
 
 
