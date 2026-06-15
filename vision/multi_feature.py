@@ -176,10 +176,63 @@ def multi_feature():
                     prev_right_index = smooth_index
                     prev_right_middle = smooth_middle
                     prev_right_ring = smooth_ring 
-                    prev_right_pinky = smooth_pinky 
+                    prev_right_pinky = smooth_pinky
 
+
+                elif hand_label == "Left":
+
+                    left_pinch = distance_index_thumb < pinch_threshold 
+                    left_middle_pinch = distance_middle_thumb < pinch_threshold 
+                    left_ring_pinch = distance_ring_thumb < pinch_threshold 
+                    left_pinky_pinch = distance_pinky_thumb < pinch_threshold 
+
+
+                    if prev_left_thumb is not None and prev_left_index is not None and prev_left_middle is not None and prev_left_ring is not None and prev_left_pinky is not None:
+                        
+                        smooth_thumb = (
+                            int(0.5 * prev_left_thumb[0] + 0.5 * thumb_tip_coords[0]),
+                            int(0.5 * prev_left_thumb[1] + 0.5 * thumb_tip_coords[1])
+                        )
+
+                        smooth_index = (
+                            int(0.5 * prev_left_index[0] + 0.5 * index_tip_coords[0]),
+                            int(0.5 * prev_left_index[1] + 0.5 * index_tip_coords[1])
+                        )
+
+                        smooth_middle = (
+                            int(0.5 * prev_left_middle[0] + 0.5 * middle_tip_coords[0]),
+                            int(0.5 * prev_left_middle[1] + 0.5 * middle_tip_coords[1])
+                        )
+
+                        smooth_ring = (
+                            int(0.5 * prev_left_ring[0] + 0.5 * ring_tip_coords[0]),
+                            int(0.5 * prev_left_ring[1] + 0.5 * ring_tip_coords[1])
+                        )
+
+                        smooth_pinky = (
+                            int(0.5 * prev_left_pinky[0] + 0.5 * pinky_tip_coords[0]),
+                            int(0.5 * prev_left_pinky[1] + 0.5 * pinky_tip_coords[1])
+                        )
+
+
+                    else:
+                        smooth_thumb = thumb_tip_coords
+                        smooth_index = index_tip_coords
+                        smooth_middle = middle_tip_coords
+                        smooth_ring = ring_tip_coords
+                        smooth_pinky = pinky_tip_coords
 
                     
+                    left_thumb = smooth_thumb 
+                    left_index = smooth_index 
+                    left_middle = smooth_middle 
+                    left_ring = smooth_ring 
+                    left_pinky = smooth_pinky 
 
-  
+                    prev_left_thumb = smooth_thumb 
+                    prev_left_index = smooth_index
+                    prev_left_middle = smooth_middle
+                    prev_left_ring = smooth_ring 
+                    prev_left_pinky = smooth_pinky 
+
 
