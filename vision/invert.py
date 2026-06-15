@@ -198,7 +198,3 @@ def inversion():
 
     cap.release()
     cv.destroyAllWindows()
-
-inversion()
-
-    
