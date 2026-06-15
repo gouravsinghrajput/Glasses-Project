@@ -34,7 +34,7 @@ def multi_feature():
 
 
     portal_activate = False 
-    prev_both_pinched = False 
+    prev_all_pinched = False 
 
     pinch_threshold = 100
 
@@ -243,4 +243,13 @@ def multi_feature():
                 )
 
         
-                
+        all_pinched = right_pinch and right_middle_pinch and right_ring_pinch and right_pinky_pinch and left_pinch and left_middle_pinch and left_ring_pinch and left_pinky_pinch
+        if all_pinched and not prev_all_pinched:
+            portal_activate = not portal_activate
+
+        prev_all_pinched = all_pinched
+
+        
+         
+
+
