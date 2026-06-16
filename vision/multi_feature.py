@@ -36,7 +36,7 @@ def multi_feature():
     portal_activate = False 
     prev_all_pinched = False 
 
-    pinch_threshold = 35
+    pinch_threshold = 60
 
 
     while True:
@@ -55,13 +55,27 @@ def multi_feature():
         h, w, _ = frame.shape 
 
         right_index = None
-        right_thumb = None 
+        right_thumb= None 
+        right_middle = None 
+        right_ring = None
+        right_pinky = None
         left_index = None
         left_thumb = None 
+        left_middle = None
+        left_ring = None 
+        left_pinky = None
 
 
         left_pinch = False
+        left_middle_pinch = False
+        left_ring_pinch = False 
+        left_pinky_pinch =False 
         right_pinch = False
+        right_middle_pinch = False
+        right_ring_pinch = False 
+        right_pinky_pinch =False
+
+
 
         if results.multi_hand_landmarks and results.multi_handedness:
             for hand_landmarks, hand in zip(
@@ -243,18 +257,18 @@ def multi_feature():
                 )
 
         
-        # all_pinched = right_pinch and right_middle_pinch and right_ring_pinch and right_pinky_pinch and left_pinch and left_middle_pinch and left_ring_pinch and left_pinky_pinch
-        # if all_pinched and not prev_all_pinched:
-        #     portal_activate = not portal_activate
-
-        # prev_all_pinched = all_pinched
-
-
-        both_pinched = right_pinch and left_pinch
-        if both_pinched and not prev_both_pinched:
+        all_pinched = right_pinch and right_middle_pinch and right_ring_pinch and right_pinky_pinch and left_pinch and left_middle_pinch and left_ring_pinch and left_pinky_pinch
+        if all_pinched and not prev_all_pinched:
             portal_activate = not portal_activate
 
-        prev_both_pinched = both_pinched
+        prev_all_pinched = all_pinched
+
+
+        # both_pinched = right_pinch and left_pinch
+        # if both_pinched and not prev_both_pinched:
+        #     portal_activate = not portal_activate
+
+        # prev_both_pinched = both_pinched
 
 
 
@@ -265,107 +279,13 @@ def multi_feature():
 
             points = np.array([left_index, left_thumb, right_thumb, right_index], np.int32)
 
-            cv.polylines(frame, [points], isClosed = True, color = (0, 255, 0), thickness = 3)
+            cv.polylines(frame, [points], isClosed = True, color = (0, 255, 0), thickness = 1)
 
             mask_frame = np.zeros((h, w), dtype = np.uint8)
 
             cv.fillPoly(mask_frame, [points], color = 255)
 
-
-
-        # --------------- watercolour -------------
-            # gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-
-            # effect_frame = cv.stylization(
-            #     gray,
-            #     sigma_s = 60,
-            #     sigma_r = 0.45
-            # )
-
-
-        # --------------- thermal -----------------
-            # gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-
-            # effect_frame = cv.applyColorMap(
-            #     gray,
-            #     cv.COLORMAP_JET
-            # )
-
-
-        #  -------- edge detection -----------
-            # gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-
-            # edges = cv.Canny(gray, 80, 150)
-
-            # effect_frame = cv.cvtColor(edges,
-            #                     cv.COLOR_GRAY2BGR)
-
-
-        # ----------- stippling -----------------------
-            # gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-
-            # effect_frame = np.full_like(frame, 255)
-
-            # for y in range(0, h, 4):
-            #     for x in range(0, w, 4):
-
-            #         intensity = gray[y,x]
-
-            #         radius = int((255 - intensity)/80)
-
-            #         if radius > 0:
-            #             cv.circle(effect_frame, (x,y), radius, (0,0,0), -1)
-
-        # --------------- pencil sketch --------------------
-            # gray_sketch, color_sketch = cv.pencilSketch(
-            #     frame,
-            #     sigma_s=60,
-            #     sigma_r=0.07,
-            #     shade_factor=0.05
-            # )
-
-            # effect = cv.cvtColor(gray_sketch,
-            #                     cv.COLOR_GRAY2BGR)
-
-        # --------- cartoon ---------------------
-            # gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-
-            # gray = cv.medianBlur(gray, 5)
-
-            # edges = cv.adaptiveThreshold(
-            #     gray,
-            #     255,
-            #     cv.ADAPTIVE_THRESH_MEAN_C,
-            #     cv.THRESH_BINARY,
-            #     9,
-            #     9
-            # )
-
-            # color = cv.bilateralFilter(frame,
-            #                         9,
-            #                         300,
-            #                         300)
-
-            # effect = cv.bitwise_and(
-            #     color,
-            #     color,
-            #     mask=edges
-            # )
-
-        # --------- pixelization ---------------------
-            # small = cv.resize(
-            #     frame,
-            #     (w//10, h//10),
-            #     interpolation=cv.INTER_LINEAR
-            # )
-
-            # effect_frame = cv.resize(
-            #     small,
-            #     (w,h),
-            #     interpolation=cv.INTER_NEAREST
-            # )
-
-        # --------- risograph --------------------
+    # --------- risograph --------------------
             gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
             gray = (gray//64)*64
@@ -385,9 +305,25 @@ def multi_feature():
 
             effect_frame = cv.add(effect_frame, noise)
 
+            frame = np.where(
+                mask_frame[:, :, None] == 255,
+                effect_frame,
+                frame
+            )
 
 
+        if(
+            all([left_middle, left_index, right_index, right_middle]) and portal_activate
+        ):
+            points = np.array([left_middle, left_index, right_index, right_middle], np.int32)
 
+            cv.polylines(frame, [points], isClosed = True, color = (0, 255, 0), thickness = 1)
+
+            mask_frame = np.zeros((h, w), dtype = np.uint8)
+
+            cv.fillPoly(mask_frame, [points], color = 255)
+
+            effect_frame = 255 - frame
 
             frame = np.where(
                 mask_frame[:, :, None] == 255,
@@ -396,6 +332,71 @@ def multi_feature():
             )
 
 
+        if(
+            all([left_ring, left_middle, right_middle, right_ring]) and portal_activate
+        ):
+            points = np.array([left_ring, left_middle, right_middle, right_ring], np.int32)
+
+            cv.polylines(frame, [points], isClosed = True, color = (0, 255, 0), thickness = 1)
+
+            mask_frame = np.zeros((h, w), dtype = np.uint8)
+
+            cv.fillPoly(mask_frame, [points], color = 255)
+            
+        # --------thermal-----------------
+
+            gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+
+            effect_frame = cv.applyColorMap(
+                gray,
+                cv.COLORMAP_JET
+            )
+
+            frame = np.where(
+                mask_frame[:, :, None] == 255,
+                effect_frame,
+                frame
+            )
+
+
+        if(
+            all([left_pinky, left_ring, right_ring, right_pinky]) and portal_activate
+        ):
+            points = np.array([left_pinky, left_ring, right_ring, right_pinky], np.int32)
+
+            cv.polylines(frame, [points], isClosed = True, color = (0, 255, 0), thickness = 1)
+
+            mask_frame = np.zeros((h, w), dtype = np.uint8)
+
+            cv.fillPoly(mask_frame, [points], color = 255)
+
+        # -------- stipplinng ------------------
+
+            gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+
+            gray = cv.GaussianBlur(gray, (9, 9), 0)
+
+            effect_frame = np.full_like(frame, 255)
+
+            for y in range(0, h, 6):
+                for x in range(0, w, 6):
+
+                    intensity = (gray[y, x] // 32 ) * 32
+
+                    radius = int((255 - intensity) / 80)
+
+                    if radius > 0:
+                        cv.circle(effect_frame, (x, y), radius, (0, 0, 0), -1)            
+            
+
+            frame = np.where(
+                mask_frame[:, :, None] == 255,
+                effect_frame,
+                frame
+            )    
+
+
+        
         cv.imshow("..", frame)
 
         k = cv.waitKey(1)
