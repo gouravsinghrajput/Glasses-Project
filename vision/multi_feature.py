@@ -323,26 +323,6 @@ def multi_feature():
 
             cv.fillPoly(mask_frame, [points], color = 255)
 
-            effect_frame = 255 - frame
-
-            frame = np.where(
-                mask_frame[:, :, None] == 255,
-                effect_frame,
-                frame
-            )
-
-
-        if(
-            all([left_ring, left_middle, right_middle, right_ring]) and portal_activate
-        ):
-            points = np.array([left_ring, left_middle, right_middle, right_ring], np.int32)
-
-            cv.polylines(frame, [points], isClosed = True, color = (0, 255, 0), thickness = 1)
-
-            mask_frame = np.zeros((h, w), dtype = np.uint8)
-
-            cv.fillPoly(mask_frame, [points], color = 255)
-            
         # --------thermal-----------------
 
             gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
@@ -357,6 +337,29 @@ def multi_feature():
                 effect_frame,
                 frame
             )
+
+
+
+        if(
+            all([left_ring, left_middle, right_middle, right_ring]) and portal_activate
+        ):
+            points = np.array([left_ring, left_middle, right_middle, right_ring], np.int32)
+
+            cv.polylines(frame, [points], isClosed = True, color = (0, 255, 0), thickness = 1)
+
+            mask_frame = np.zeros((h, w), dtype = np.uint8)
+
+            cv.fillPoly(mask_frame, [points], color = 255)
+
+            effect_frame = 255 - frame
+
+            frame = np.where(
+                mask_frame[:, :, None] == 255,
+                effect_frame,
+                frame
+            )
+            
+        
 
 
         if(
