@@ -411,8 +411,3 @@ def multi_feature():
     cap.release()
     cv.destroyAllWindows()
 
-multi_feature()
-
-
-
-
