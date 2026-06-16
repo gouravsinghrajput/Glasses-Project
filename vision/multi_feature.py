@@ -36,7 +36,7 @@ def multi_feature():
     portal_activate = False 
     prev_all_pinched = False 
 
-    pinch_threshold = 100
+    pinch_threshold = 35
 
 
     while True:
@@ -304,7 +304,7 @@ def multi_feature():
         # ----------- stippling -----------------------
             # gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
-            # effect = np.full_like(frame, 255)
+            # effect_frame = np.full_like(frame, 255)
 
             # for y in range(0, h, 4):
             #     for x in range(0, w, 4):
@@ -314,7 +314,7 @@ def multi_feature():
             #         radius = int((255 - intensity)/80)
 
             #         if radius > 0:
-            #             cv.circle(effect, (x,y), radius, (0,0,0), -1)
+            #             cv.circle(effect_frame, (x,y), radius, (0,0,0), -1)
 
         # --------------- pencil sketch --------------------
             # gray_sketch, color_sketch = cv.pencilSketch(
@@ -359,41 +359,41 @@ def multi_feature():
             #     interpolation=cv.INTER_LINEAR
             # )
 
-            # effect = cv.resize(
+            # effect_frame = cv.resize(
             #     small,
             #     (w,h),
             #     interpolation=cv.INTER_NEAREST
             # )
 
         # --------- risograph --------------------
-            # gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+            gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
-            # gray = (gray//64)*64
+            gray = (gray//64)*64
 
-            # effect = np.zeros_like(frame)
+            effect_frame = np.zeros_like(frame)
 
-            # effect[:,:,0] = gray * 0.9
-            # effect[:,:,1] = gray * 0.2
-            # effect[:,:,2] = gray
+            effect_frame[:,:,0] = gray * 0.9
+            effect_frame[:,:,1] = gray * 0.2
+            effect_frame[:,:,2] = gray
 
-            # noise = np.random.randint(
-            #     0,
-            #     30,
-            #     frame.shape,
-            #     dtype=np.uint8
-            # )
+            noise = np.random.randint(
+                0,
+                30,
+                frame.shape,
+                dtype=np.uint8
+            )
 
-            # effect = cv.add(effect, noise)
-
-
+            effect_frame = cv.add(effect_frame, noise)
 
 
 
-            # frame = np.where(
-            #     mask_frame[:, :, None] == 255,
-            #     effect_frame,
-            #     frame
-            # )
+
+
+            frame = np.where(
+                mask_frame[:, :, None] == 255,
+                effect_frame,
+                frame
+            )
 
 
         cv.imshow("..", frame)
