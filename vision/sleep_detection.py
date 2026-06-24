@@ -23,6 +23,7 @@ def sleep_detection():
 
 
     #videocapture -----------
+    #  we will be using another camera for this, like cv.VideoCapture(1)
     cap = cv.VideoCapture(0) 
     #------------------------
 
@@ -111,7 +112,7 @@ def sleep_detection():
                 cv.putText(frame, "You Are Awake!!!", (10, 10), cv.FONT_ITALIC, 0.5, (0, 255, 0), 2)    
             if (ear_right < ear_threshold and ear_left < ear_threshold) and blink_counter > frame_threshold_for_sleepiness:
                 cv.putText(frame, "UHTJAAA", (10, 150), cv.FONT_ITALIC, 1, (0, 0, 255), 2)
-                print("Uthjaaaa....,  uthjaaaaa  oooooyyeeeeee")
+                # print("Uthjaaaa....,  uthjaaaaa  oooooyyeeeeee")
                 if not play_arpit:
                     play_arpit = True 
                     py.mixer.music.play()
