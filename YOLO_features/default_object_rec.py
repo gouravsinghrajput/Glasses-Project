@@ -64,9 +64,3 @@ def object_rec():
     cap.release()
     cv.destroyAllWindows()
 
-object_rec()
-
-
-
-        
-
