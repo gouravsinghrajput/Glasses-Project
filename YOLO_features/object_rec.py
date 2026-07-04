@@ -22,22 +22,35 @@ def object_rec():
 
         # frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
 
-        results = model(frame)
+        results = model(frame, verbose = False)
 
         if len(results[0].boxes) > 0:
             for box in results[0].boxes:
 
                 x1, y1, x2, y2 = map(int, box.xyxy[0])
 
-                # label
 
                 # confidence 
+                confidence = float(box.conf[0])
 
                 # cls
+                cls = int(box.cls[0])
+
+                # label
+                label = model.names[cls]
+
 
                 cv.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 0), 1)
 
                 # text
+                cv.putText(frame,
+                           f"{label} {confidence:.2f}",
+                           (x1, y1 - 10),
+                           cv.FONT_HERSHEY_COMPLEX,
+                           1,
+                           (255, 0, 0),
+                           2)
+                           
 
         
 
