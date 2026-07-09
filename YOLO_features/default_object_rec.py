@@ -6,7 +6,7 @@ import numpy as np
 
 def object_rec():
 
-    model = YOLO("yolov8n.pt")
+    model = YOLO("yolo26n.pt")
 
     cap = cv.VideoCapture(0)
 
@@ -64,3 +64,4 @@ def object_rec():
     cap.release()
     cv.destroyAllWindows()
 
+object_rec()
