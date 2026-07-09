@@ -1,7 +1,7 @@
 from ultralytics import YOLO
 import cv2 as cv 
 # import mediapipe as mp 
-import numpy as np 
+# import numpy as np 
 
 
 def object_rec():
