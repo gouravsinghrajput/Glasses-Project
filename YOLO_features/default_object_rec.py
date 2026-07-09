@@ -6,7 +6,7 @@ import numpy as np
 
 def object_rec():
 
-    model = YOLO("yolo26n.pt")
+    model = YOLO("yolo11n.pt")
 
     cap = cv.VideoCapture(0)
 
