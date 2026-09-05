@@ -6,7 +6,7 @@ import cv2 as cv
 
 def object_rec():
 
-    model = YOLO("yolo11n.pt")
+    model = YOLO("YOLO_models/yolo11n.pt")
 
     cap = cv.VideoCapture(0)
 
