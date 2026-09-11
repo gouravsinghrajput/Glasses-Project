@@ -68,7 +68,7 @@ for i in range (int(RATE / CHUNK * RECORD_TIME)):
     frames.append(data_taken)
 
 
-audio_data_taken = np.ffrombuffer(
+audio_data_taken = np.frombuffer(
     b"".join(frames), 
     dtype = np.int16
 )
@@ -83,3 +83,30 @@ segments, info = model.transcribe(
     )
 
 
+spoken_text = " ".join(
+    segment.text for segment in segments
+).strip()
+
+
+#for testing purpose
+print("You said:", spoken_text)
+print("Expected:", COMMANDS)
+
+
+print("You said:", spoken_text)
+print("Expected:", COMMANDS)
+
+
+#for testing purposes
+if spoken_text.lower() == COMMANDS.lower():
+
+    print("✅ Correct!")
+
+else:
+
+    print("❌ Incorrect!")
+
+
+stream.stop_stream()
+stream.close()
+audio_input.terminate()
