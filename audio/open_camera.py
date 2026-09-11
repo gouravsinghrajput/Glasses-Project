@@ -98,7 +98,7 @@ print("Expected:", COMMANDS)
 
 
 #for testing purposes
-if spoken_text.lower() == COMMANDS.lower():
+if spoken_text.lower() in [command.lower() for command in COMMANDS]:
 
     print("✅ Correct!")
 
