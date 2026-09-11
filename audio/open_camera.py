@@ -9,7 +9,7 @@ from faster_whisper import WhisperModel
 
 RATE = 16000
 CHUNK = 1280 
-RECORD_TIME = 4
+RECORD_TIME = 2
 
 
 WAKE_THRESHOLD = 0.5 
@@ -59,4 +59,27 @@ frames = []
 # the iteration will go from basically 0 to RATE / CHUNK * RECORD_TIME
 #this is the number of frames that will be procesed in a sec
 for i in range (int(RATE / CHUNK * RECORD_TIME)):
-    
+
+    data_taken = stream.read(
+        CHUNK, 
+        exception_on_overflow = False
+    )
+
+    frames.append(data_taken)
+
+
+audio_data_taken = np.ffrombuffer(
+    b"".join(frames), 
+    dtype = np.int16
+)
+
+audio_data_taken = audio_data_taken.astype(np.float32) / 32768.0
+
+
+segments, info = model.transcribe(
+    audio_data_taken,
+    language = "en",
+    beam_size = 1
+    )
+
+
