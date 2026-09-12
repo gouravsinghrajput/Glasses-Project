@@ -1,6 +1,7 @@
 import numpy as np 
 import time 
 import pyaudio
+import string 
 
 
 from openwakeword.model import Model 
@@ -88,6 +89,10 @@ spoken_text = " ".join(
 ).strip()
 
 
+spoken_text = spoken_text.translate(str.maketrans("", "", string.punctuation))
+
+spoken_text = spoken_text.lower()
+
 #for testing purpose
 print("You said:", spoken_text)
 print("Expected:", COMMANDS)
@@ -98,7 +103,7 @@ print("Expected:", COMMANDS)
 
 
 #for testing purposes
-if spoken_text.lower() in [command.lower() for command in COMMANDS]:
+if spoken_text in [command.lower() for command in COMMANDS]:
 
     print("✅ Correct!")
 
