@@ -29,6 +29,11 @@ def open_camera_audio_call():
                 ]
 
 
+    BREAK_WORD = ['close the camera', 
+                  'close camera', 
+                  ]
+
+
 
     model = WhisperModel(
         "small", 
@@ -100,10 +105,6 @@ def open_camera_audio_call():
     print("Expected:", COMMANDS)
 
 
-    print("You said:", spoken_text)
-    print("Expected:", COMMANDS)
-
-
     #for testing purposes
     # if spoken_text in [command.lower() for command in COMMANDS]:
 
@@ -117,3 +118,5 @@ def open_camera_audio_call():
     stream.stop_stream()
     stream.close()
     audio_input.terminate()
+
+    return spoken_text
