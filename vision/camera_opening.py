@@ -5,9 +5,22 @@ import mediapipe as mp
 
 def camera_opening():
 
-    cap = cv.VideoCapture(0)    
-    if not cap.isOpened():
-        print("Cannot open camera")
-        exit()
+    cap = cv.VideoCapture(0)
 
-    return cap
+    while True:
+        ret, frame = cap.read()
+
+        if not ret:
+            break
+
+        frame = cv.flip(frame, 1)
+
+        cv.imshow("Camera", frame)
+
+        k = cv.waitKey(1)
+        
+        if k == 27:
+            break
+
+    cap.release()
+    cv.destroyAllWindows()
