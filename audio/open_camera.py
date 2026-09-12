@@ -7,6 +7,21 @@ import string
 from openwakeword.model import Model 
 from faster_whisper import WhisperModel 
 
+COMMANDS = ["open camera", 
+                "open the camera", 
+                "can you please open the camera for me",
+                "start the camera", 
+                "turn on the camera", 
+                "activate the camera", 
+                "activate camera"
+                ]
+
+
+BREAK_WORD = ['close the camera', 
+                  'close camera', 
+                  ]
+
+
 
 def open_camera_audio_call():
 
@@ -17,21 +32,6 @@ def open_camera_audio_call():
 
     WAKE_THRESHOLD = 0.5 
     COMMAND_TIME = 5 
-
-
-    COMMANDS = ["open camera", 
-                "open the camera", 
-                "can you please open the camera for me",
-                "start the camera", 
-                "turn on the camera", 
-                "activate the camera", 
-                "activate camera"
-                ]
-
-
-    BREAK_WORD = ['close the camera', 
-                  'close camera', 
-                  ]
 
 
 
@@ -102,7 +102,7 @@ def open_camera_audio_call():
 
     #for testing purpose
     print("You said:", spoken_text)
-    print("Expected:", COMMANDS)
+    # print("Expected:", COMMANDS)
 
 
     #for testing purposes
