@@ -22,5 +22,7 @@ def camera_opening():
         if k == 27:
             break
 
-    cap.release()
-    cv.destroyAllWindows()
+    # cap.release()
+    # cv.destroyAllWindows()
+
+    return cap 
