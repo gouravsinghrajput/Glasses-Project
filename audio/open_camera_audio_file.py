@@ -108,11 +108,11 @@ def open_camera_audio_call():
     #for testing purposes
     # if spoken_text in [command.lower() for command in COMMANDS]:
 
-    #     print("✅ Correct!")
+    #     print("Correct!")
 
     # else:
 
-    #     print("❌ Incorrect!")
+    #     print("Incorrect!")
 
 
     stream.stop_stream()
